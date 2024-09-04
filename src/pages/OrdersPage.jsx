@@ -1,11 +1,18 @@
 import React from 'react'
 import Header from '../common/header'
 import StatCard from '../common/statcard';
-import { BarChart2, ShoppingBag, Users, Zap } from "lucide-react";
+import {  CheckCircle, Clock, DollarSign, ShoppingBag  } from "lucide-react";
 import { motion } from "framer-motion";
-import SalesChannelChart from '../common/saleschannelchart';
-import SalesOverviewChart from '../common/salesoverviewchart';
-import CategoryDistributionChart from '../common/catagorydistributionchart';
+import Orderlist from '../order/orderlist';
+import OrderDistribution from '../order/orderdistribution';
+
+
+const orderStats = {
+	totalOrders: "1,234",
+	pendingOrders: "56",
+	completedOrders: "1,178",
+	totalRevenue: "$98,765",
+};
 
 const OrdersPage = () => {
   return (
@@ -30,11 +37,11 @@ const OrdersPage = () => {
 				</motion.div>
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8'>
-					<DailyOrders />
+					{/* <DailyOrders /> */}
 					<OrderDistribution />
 				</div>
 
-				<OrdersTable />
+				<Orderlist />
 			</main>
     </div>
   )
