@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
 
-export const Sidebar = () => {
+export const Sidebars = () => {
   const SIDEBAR_ITEMS = [
     { name: "Overview", icon: BarChart2, route: "/OverviewPage" },
     { name: "Products", icon: ShoppingBag, route: "/products" },
@@ -81,4 +81,4 @@ export const Sidebar = () => {
   );
 };
 // };
-export default Sidebar;
+export default Sidebars;

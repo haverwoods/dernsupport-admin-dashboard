@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import StatCard from '../common/statcard';
 import UsersTable from '../user/usertable';
 import UserDemographicsChart from '../user/userdemographics';
+import Layout from '../layout/layout';
 
 const UsersPage = () => {
 
@@ -17,6 +18,8 @@ const UsersPage = () => {
   };
 
   return (
+	<Layout>
+
     <div className='flex-1 overflow-auto relative z-10'>
        <Header title='Users Page' />
        <main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
@@ -53,6 +56,7 @@ const UsersPage = () => {
 				</div>
 			</main>
     </div>
+	</Layout>
   )
 }
 

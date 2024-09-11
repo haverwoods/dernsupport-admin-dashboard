@@ -5,6 +5,7 @@ import {  CheckCircle, Clock, DollarSign, ShoppingBag  } from "lucide-react";
 import { motion } from "framer-motion";
 import Orderlist from '../order/orderlist';
 import OrderDistribution from '../order/orderdistribution';
+import Layout from '../layout/layout';
 
 
 const orderStats = {
@@ -16,6 +17,8 @@ const orderStats = {
 
 const OrdersPage = () => {
   return (
+	<Layout>
+
     <div className='flex-1 overflow-auto relative z-10'>
        <Header title='Orders Page' />
        <main className='max-w-7xl mx-auto py-6 px-4 lg:px-8'>
@@ -44,6 +47,7 @@ const OrdersPage = () => {
 				<Orderlist />
 			</main>
     </div>
+	</Layout>
   )
 }
 
