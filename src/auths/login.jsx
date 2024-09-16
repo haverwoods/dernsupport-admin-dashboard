@@ -11,9 +11,13 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      navigate('/OverviewPage');
+      // const response = await axios.post('/api/auth/login', { email, password });
+      // localStorage.setItem('token', response.data.token);
+      // navigate('/OverviewPage');
+      const response = await axios.post('http://localhost:5000/api/auth/login', {email, password });
+      console.log("Registration successful:", response.data);
+      localStorage.setItem("token", response.data.token);
+      navigate("/OverviewPage");
     } catch (err) {
       setError(err.response.data.msg || 'An error occurred during login');
     }
@@ -21,6 +25,8 @@ const Login = () => {
 
   return (
 
+    <div className=" w-1/4 rounded-2xl mt-8 mx-auto bg-gray-200 relative p-6 border-2 border-gray-300 transition-all ease-out duration-500 overflow-visible">
+      
     <div className="flex-1  overflow-auto relative z-10">
     <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8">
       <h2 className="text-2xl font-bold mb-4">Login</h2>
@@ -47,11 +53,18 @@ const Login = () => {
           className="w-full px-3 py-2 border rounded"
         />
       </div>
-      <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+      <div className="my-5">
+          <span className="ml-1 "> create a new account</span>
+          <a href="/registration">
+            <span className="mx-2 mt-8 text-blue-700">click here</span>
+          </a>
+          </div>
+      <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-green-600">
         Login
       </button>
     </form>
     </div>
+      </div>
   );
 };
 
