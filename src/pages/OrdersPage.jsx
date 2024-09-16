@@ -1,11 +1,11 @@
 import React from 'react'
-import Header from '../common/header'
-import StatCard from '../common/statcard';
+import Layout from '../layout/layout';
+import Header from '../components/common/header';
+import StatCard from '../components/common/statcard';
 import {  CheckCircle, Clock, DollarSign, ShoppingBag  } from "lucide-react";
 import { motion } from "framer-motion";
-import Orderlist from '../order/orderlist';
-import OrderDistribution from '../order/orderdistribution';
-import Layout from '../layout/layout';
+import Orderlist from '../components/order/orderlist';
+
 
 
 const orderStats = {
@@ -41,7 +41,7 @@ const OrdersPage = () => {
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8'>
 					{/* <DailyOrders /> */}
-					<OrderDistribution />
+					{/* <OrderDistribution /> */}
 				</div>
 
 				<Orderlist />

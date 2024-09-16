@@ -1,5 +1,6 @@
 import React from 'react'
-import Header from '../common/header'
+import Header from '../components/common/header';
+
 import Layout from '../layout/layout'
 
 const SalesPage = () => {

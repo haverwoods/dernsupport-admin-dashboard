@@ -1,12 +1,13 @@
 import React from 'react'
-import Header from '../common/header'
+
 import { UserCheck, UserPlus, UsersIcon, UserX } from "lucide-react";
 import { motion } from "framer-motion";
 
-import StatCard from '../common/statcard';
-import UsersTable from '../user/usertable';
-import UserDemographicsChart from '../user/userdemographics';
+// import StatCard from '../common/statcard';
+import UsersTable from '../components/user/usertable';
+import UserDemographicsChart from '../components/user/userdemographics';
 import Layout from '../layout/layout';
+import StatCard from '../components/common/statcard';
 
 const UsersPage = () => {
 

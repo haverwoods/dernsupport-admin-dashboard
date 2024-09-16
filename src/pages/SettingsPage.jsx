@@ -1,6 +1,7 @@
 import React from 'react'
-import Header from '../common/header'
+
 import Layout from '../layout/layout'
+import Header from '../components/common/header'
 
 const SettingsPage = () => {
   return (
