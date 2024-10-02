@@ -20,7 +20,8 @@ const Registration = () => {
       //   `${process.env.REACT_APP_BACKEND_API_URL}/api/auth/register`,
       //   { username, email, password }
       // );
-      const response = await axios.post('http://localhost:5000/api/auth/register', { username, email, password });
+      const response = await axios.post('http://localhost:5000/api/auth/register/admin', { username, email, password });
+      // const response = await axios.post('http://localhost:5000/api/auth/register', { username, email, password });
       console.log("Registration successful:", response.data);
       localStorage.setItem("token", response.data.token);
       navigate("/OverviewPage");
