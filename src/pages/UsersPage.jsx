@@ -8,6 +8,7 @@ import UsersTable from '../components/user/usertable';
 import UserDemographicsChart from '../components/user/userdemographics';
 import Layout from '../layout/layout';
 import StatCard from '../components/common/statcard';
+import Header from '../components/common/header'
 
 const UsersPage = () => {
 
