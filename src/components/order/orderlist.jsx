@@ -1,79 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, Eye } from "lucide-react";
-
-const orderData = [
-  {
-    id: "ORD001",
-    customer: "John Doe",
-    total: 235.4,
-    status: "Delivered",
-    date: "2023-07-01",
-  },
-  {
-    id: "ORD002",
-    customer: "Jane Smith",
-    total: 412.0,
-    status: "Pending",
-    date: "2023-07-02",
-  },
-  {
-    id: "ORD003",
-    customer: "Bob Johnson",
-    total: 162.5,
-    status: "Shipped",
-    date: "2023-07-03",
-  },
-  {
-    id: "ORD004",
-    customer: "Alice Brown",
-    total: 750.2,
-    status: "Pending",
-    date: "2023-07-04",
-  },
-  {
-    id: "ORD005",
-    customer: "Charlie Wilson",
-    total: 95.8,
-    status: "Delivered",
-    date: "2023-07-05",
-  },
-  {
-    id: "ORD006",
-    customer: "Eva Martinez",
-    total: 310.75,
-    status: "Processing",
-    date: "2023-07-06",
-  },
-  {
-    id: "ORD007",
-    customer: "David Lee",
-    total: 528.9,
-    status: "Shipped",
-    date: "2023-07-07",
-  },
-  {
-    id: "ORD008",
-    customer: "Grace Taylor",
-    total: 189.6,
-    status: "Delivered",
-    date: "2023-07-08",
-  },
-];
+import { format } from 'date-fns';
 
 const Orderlist = () => {
+  const [requests, setRequests] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredOrders, setFilteredOrders] = useState(orderData);
+  const [showBox, setShowBox] = useState(false);
+  const currentMonth = format(new Date(), 'MMMM'); 
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const togglebox = () => {
+    setShowBox(!showBox);
+  };
+  const fetchProducts = async () => {
+    try {
+      //fetch data from backend
+      const response = await fetch(
+        "http://localhost:5000/routes/request/request"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch products");
+      }
+      const data = await response.json();
+      //reverse order of fetched data so lastest order can be appear first
+      const reversedata = data.reverse();
+      setRequests(reversedata);
+      setFilteredRequests(reversedata);
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-    const filtered = orderData.filter(
-      (order) =>
-        order.id.toLowerCase().includes(term) ||
-        order.customer.toLowerCase().includes(term)
+    const filtered = requests.filter(
+      (requests) =>
+        requests.id.toLowerCase().includes(term) ||
+        requests.customer.toLowerCase().includes(term)
     );
-    setFilteredOrders(filtered);
+    setFilteredRequests(filtered);
   };
 
   return (
@@ -98,88 +71,135 @@ const Orderlist = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-700">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Order ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Customer
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Total
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
+        {requests.map((request) => (
+          <table className="min-w-full divide-y divide-gray-700">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Order ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  user ID
+                </th>
+                {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  problem description
+                </th> */}
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  user email
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
 
-          <tbody className="divide divide-gray-700">
-            {filteredOrders.map((order) => (
-              <motion.tr
-                key={order.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                  {order.id}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                  {order.customer}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
+            <tbody className="divide divide-gray-700">
+              {filteredRequests.map((requests) => (
+                <motion.tr
+                  key={requests.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
+                    {requests.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
+                    {requests.clientId}
+                  </td>
+
+                  {/* <td className=" text-gray-100 whitespace-nowrap block overflow-wrap break-word text-sm font-medium mt-1 w-10 rounded-md shadow-sm py-2 px-3 focus:outline-none sm:text-sm"> */}
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
+                  {requests.description}
+                </td> */}
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
                   ${order.total.toFixed(2)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      order.status === "Delivered"
-                        ? "bg-green-100 text-green-800"
-                        : order.status === "Processing"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : order.status === "Shipped"
-                        ? "bg-blue-100 text-blue-800"
-                        : order.status === "Pending"
-                        ? "bg-red-300 text-red-800"
-                        : ""
-                    }`}
-                  >
-                    {order.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  {order.date}
-                </td>
-          
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                  <span>
-{
-                      order.status === "Pending" && (
-                        <>
-                          <button className="text-indigo-400 hover:text-indigo-300 mr-2">
-                            Accept
+                </td> */}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        requests.status === "Delivered"
+                          ? "bg-green-100 text-green-800"
+                          : requests.status === "Processing"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : requests.status === "Shipped"
+                          ? "bg-blue-100 text-blue-800"
+                          : requests.status === "Pending"
+                          ? "bg-red-300 text-red-800"
+                          : ""
+                      }`}
+                    >
+                      {requests.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    {requests.pickupDate || "No pickup date"}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    {requests.clientemail || "No email"}
+                  </td>
+
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    <button
+                      onClick={togglebox}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Action
+                    </button>
+                    {showBox && (
+                      <div className=" flex items-center justify-center bg-gray-100 bg-opacity-50">
+                        <div className="w-96 md:min-w-40 mx-auto bg-white rounded-lg shadow-lg p-6 space-y-4">
+                          <h2 className="text-2xl font-bold text-gray-800">
+                          {requests.clientemail }
+                          </h2>
+                          <p className="text-sm text-gray-600">
+                            pickupdate: {requests.pickupDate}
+                          </p>
+                          <p className="text-gray-700">
+                            {requests.description}
+                          </p>
+
+                          <div className="space-y-2">
+                            <label className="block text-gray-700 font-bold">
+                              Status:
+                            </label>
+                            <select className="w-full px-4 py-2 border rounded-lg text-gray-700">
+                              <option className="bg-red-300 text-red-800">Pending</option>
+                              <option className="bg-yellow-100 text-yellow-800">Processing</option>
+                              <option className=" bg-green-100 text-green-800">delivered</option>
+                            </select>
+                          </div>
+
+                          <button className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Send Invoice
                           </button>
-                          <button className="text-red-400 hover:text-red-300">
-                            Decline
-                          </button>
-                        </>
-                      )
-                    }
-				  </span>
-                </td>
-              </motion.tr>
-            ))}
-          </tbody>
-        </table>
+                        </div>
+                      </div>
+                    )}
+                    {/* <span>
+                    {requests.status === "Pending" && (
+                      <>
+                        <button className="text-indigo-400 hover:text-indigo-300 mr-2">
+                          Accept
+                        </button>
+                        <button className="text-red-400 hover:text-red-300">
+                          Decline
+                        </button>
+                      </>
+                    )}
+                  </span> */}
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        ))}
       </div>
     </motion.div>
   );

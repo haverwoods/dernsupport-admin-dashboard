@@ -23,9 +23,9 @@ function App() {
 
 			{/* <Sidebar /> */}
 			<Routes>
-				<Route path='/' element={<Registration />} />
-				<Route path='/registration' element={<Registration/>} />
+				<Route path='/' element={<Login />} />
 				<Route path='/login' element={<Login/>} />
+				<Route path='/registration' element={<Registration/>} />
 				<Route path='/OverviewPage' element={<OverviewPage />} />
 				<Route path='/products' element={<ProductsPage />} />
 				<Route path='/users' element={<UsersPage />} />

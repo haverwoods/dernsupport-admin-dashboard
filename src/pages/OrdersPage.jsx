@@ -2,19 +2,20 @@ import React from 'react'
 import Layout from '../layout/layout';
 import Header from '../components/common/header';
 import StatCard from '../components/common/statcard';
-import {  CheckCircle, Clock, DollarSign, ShoppingBag  } from "lucide-react";
+import {  CalendarRange, CheckCircle, Clock, DollarSign, ShoppingBag  } from "lucide-react";
 import { motion } from "framer-motion";
 import Orderlist from '../components/order/orderlist';
+import { format } from 'date-fns';
 
 
+const currentMonth = format(new Date(), 'MMMM'); 
 
 const orderStats = {
-	totalOrders: "1,234",
-	pendingOrders: "56",
-	completedOrders: "1,178",
-	totalRevenue: "$98,765",
+	totalOrders: "39",
+	pendingOrders: "5",
+	completedOrders: "34",
+	Month: currentMonth,
 };
-
 const OrdersPage = () => {
   return (
 	<Layout>
@@ -36,12 +37,11 @@ const OrdersPage = () => {
 						value={orderStats.completedOrders}
 						color='#10B981'
 					/>
-					<StatCard name='Total Revenue' icon={DollarSign} value={orderStats.totalRevenue} color='#EF4444' />
+					<StatCard name='Month' icon={CalendarRange} value={orderStats.Month} color='#EF4444' />
 				</motion.div>
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8'>
-					{/* <DailyOrders /> */}
-					{/* <OrderDistribution /> */}
+					
 				</div>
 
 				<Orderlist />
