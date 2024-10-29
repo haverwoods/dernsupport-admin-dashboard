@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, Eye } from "lucide-react";
-import { format } from 'date-fns';
+import { format } from "date-fns";
+import Invoice from "../../invoice/invoice";
 
 const Orderlist = () => {
   const [requests, setRequests] = useState([]);
@@ -9,14 +10,26 @@ const Orderlist = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showBox, setShowBox] = useState(false);
-  const currentMonth = format(new Date(), 'MMMM'); 
+  const currentMonth = format(new Date(), "MMMM");
+  const [visibleBox, setVisibleBox] = useState(null);
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  const togglebox = () => {
-    setShowBox(!showBox);
+  const togglebox = (boxofindex) => {
+    if (visibleBox === boxofindex) {
+      setVisibleBox(null);
+    } else {
+      setVisibleBox(boxofindex);
+    }
+    // setShowBox(!showBox);
   };
+
+  const invoice = () => {
+    Invoice();
+  };
+
   const fetchProducts = async () => {
     try {
       //fetch data from backend
@@ -100,7 +113,7 @@ const Orderlist = () => {
             </thead>
 
             <tbody className="divide divide-gray-700">
-              {filteredRequests.map((requests) => (
+              {filteredRequests.map((requests, index) => (
                 <motion.tr
                   key={requests.id}
                   initial={{ opacity: 0 }}
@@ -114,13 +127,6 @@ const Orderlist = () => {
                     {requests.clientId}
                   </td>
 
-                  {/* <td className=" text-gray-100 whitespace-nowrap block overflow-wrap break-word text-sm font-medium mt-1 w-10 rounded-md shadow-sm py-2 px-3 focus:outline-none sm:text-sm"> */}
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                  {requests.description}
-                </td> */}
-                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                  ${order.total.toFixed(2)}
-                </td> */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     <span
                       className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -147,21 +153,23 @@ const Orderlist = () => {
 
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     <button
-                      onClick={togglebox}
+                      // onClick={togglebox(index)}
+                      onClick={() => togglebox(index)}
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     >
                       Action
                     </button>
-                    {showBox && (
-                      <div className=" flex items-center justify-center bg-gray-100 bg-opacity-50">
-                        <div className="w-96 md:min-w-40 mx-auto bg-white rounded-lg shadow-lg p-6 space-y-4">
+                    {/* //use modal like in product table and add link for invoice to pay  */}
+                    {visibleBox === index && (
+                      <div className="  flex justify-center  bg-gray-100 bg-opacity-50 z-50">
+                        <div className="w-96  bg-white rounded-lg shadow-lg p-6 space-y-4 relative">
                           <h2 className="text-2xl font-bold text-gray-800">
-                          {requests.clientemail }
+                            {requests.clientemail}
                           </h2>
                           <p className="text-sm text-gray-600">
                             pickupdate: {requests.pickupDate}
                           </p>
-                          <p className="text-gray-700">
+                          <p className="text-gray-700  break-words whitespace-normal">
                             {requests.description}
                           </p>
 
@@ -170,30 +178,21 @@ const Orderlist = () => {
                               Status:
                             </label>
                             <select className="w-full px-4 py-2 border rounded-lg text-gray-700">
-                              <option className="bg-red-300 text-red-800">Pending</option>
-                              <option className="bg-yellow-100 text-yellow-800">Processing</option>
-                              <option className=" bg-green-100 text-green-800">delivered</option>
+                              <option className="bg-red-300 text-red-800">
+                                Pending
+                              </option>
+                              <option className="bg-yellow-100 text-yellow-800">
+                                Processing
+                              </option>
+                              <option className=" bg-green-100 text-green-800">
+                                delivered
+                              </option>
                             </select>
                           </div>
 
-                          <button className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                            Send Invoice
-                          </button>
                         </div>
                       </div>
                     )}
-                    {/* <span>
-                    {requests.status === "Pending" && (
-                      <>
-                        <button className="text-indigo-400 hover:text-indigo-300 mr-2">
-                          Accept
-                        </button>
-                        <button className="text-red-400 hover:text-red-300">
-                          Decline
-                        </button>
-                      </>
-                    )}
-                  </span> */}
                   </td>
                 </motion.tr>
               ))}
