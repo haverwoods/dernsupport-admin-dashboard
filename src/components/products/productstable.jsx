@@ -39,8 +39,8 @@ const Productstable = () => {
       const response = await axios.post("http://localhost:5000/api/products", {
         name: productData.name,
         catagory: productData.category,
-        price: parseInt(productData.price), // convert price to an integer
-        stock: parseInt(productData.stock), // convert stock to an integer
+        price: parseInt(productData.price), 
+        stock: parseInt(productData.stock), 
       });
 
       if (response.status === 201) {

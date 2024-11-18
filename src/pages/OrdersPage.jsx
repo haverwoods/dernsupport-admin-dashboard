@@ -11,9 +11,7 @@ import { format } from 'date-fns';
 const currentMonth = format(new Date(), 'MMMM'); 
 
 const orderStats = {
-	totalOrders: "39",
-	pendingOrders: "5",
-	completedOrders: "34",
+	totalOrders: "50",
 	Month: currentMonth,
 };
 const OrdersPage = () => {
@@ -30,13 +28,7 @@ const OrdersPage = () => {
 					transition={{ duration: 1 }}
 				>
 					<StatCard name='Total Orders' icon={ShoppingBag} value={orderStats.totalOrders} color='#6366F1' />
-					<StatCard name='Pending Orders' icon={Clock} value={orderStats.pendingOrders} color='#F59E0B' />
-					<StatCard
-						name='Completed Orders'
-						icon={CheckCircle}
-						value={orderStats.completedOrders}
-						color='#10B981'
-					/>
+					
 					<StatCard name='Month' icon={CalendarRange} value={orderStats.Month} color='#EF4444' />
 				</motion.div>
 

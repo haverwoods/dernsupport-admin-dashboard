@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
+
 // import { loadStripe } from "@stripe/stripe-js";
 
 // const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -15,6 +17,12 @@ const Invoice = ({ orderId, clientId }) => {
   const [description, setDescription] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [userMessage, setUserMessage] = useState('');
+  const location = useLocation();
+  const clientEmail = location.state?.clientEmail || 'No email provided';
+const navigate = useNavigate()
+  const back = () => {
+    navigate("/orders")
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -35,6 +43,7 @@ const Invoice = ({ orderId, clientId }) => {
       console.error("Failed to fetch products:", error);
     }
   };
+ 
 
   // Handle product search
   const handleSearch = (e) => {
@@ -65,47 +74,36 @@ const Invoice = ({ orderId, clientId }) => {
   };
 
   // Function to handle sending the invoice email
-  // const handleSendEmail = async () => {
-  //   try {
-  //     const invoiceDetails = {
-  //       sparePartCost,
-  //       serviceHours,
-  //       perHourRate,
-  //       description,
-  //       totalPrice,
-  //     };
+  const handleSendEmail = async () => {
+    try {
+      const invoiceDetails = {
+        sparePartCost,
+        serviceHours,
+        perHourRate,
+        description,
+        totalPrice,
+      };
 
-  //     await axios.post("http://localhost:5000/api/invoice/invoice", {
-  //       clientId,
-  //       orderId,
-  //       invoiceDetails,
-  //     });
-  //     alert("Invoice email sent successfully!");
-  //   } catch (error) {
-  //     console.error("Error sending email:", error);
-  //     alert("Failed to send invoice email.");
-  //   }
-  // };
-
-  // Function to handle Stripe payment
-  const handleStripePayment = async () => {
-    const stripe = await stripePromise;
-    const response = await axios.post("http://localhost:5000/api/checkout", {
-      amount: totalPrice * 100, // Stripe expects amount in cents
-    });
-
-    const { sessionId } = response.data;
-    const result = await stripe.redirectToCheckout({ sessionId });
-    if (result.error) {
-      console.error(result.error.message);
+      await axios.post("http://localhost:5000/api/invoice/invoice", {
+        clientId,
+        orderId,
+        invoiceDetails,
+      });
+      alert("Invoice email sent successfully!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send invoice email.");
     }
   };
+
+
 
   return (
     <div className="max-w-md mx-auto p-6 border border-gray-300 rounded-lg shadow-md bg-gradient-to-r from-blue-50 to-white">
       <h3 className="text-xl font-semibold mb-4 text-gray-800">
         Order Details for Invoice
       </h3>
+      {/* <p>User Email: {{clientEmail} || "Email not available"}</p> */}
 
      
       {/* Product Selection Box */}
@@ -238,20 +236,26 @@ const Invoice = ({ orderId, clientId }) => {
       {/* Button to send invoice */}
       <button
         className="w-full p-2 mb-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
-        // onClick={handleSendEmail}
+        onClick={handleSendEmail}
       >
         Send Invoice Email
       </button>
 
       {/* Stripe Payment Button */}
-      {totalPrice > 0 && (
+      {/* {totalPrice > 0 && (
         <button
           className="w-full p-2 bg-purple-500 text-white rounded-md hover:bg-purple-600 transition"
           onClick={handleStripePayment}
         >
           Pay Invoice (${totalPrice})
         </button>
-      )}
+      )} */}
+        <button
+                        onClick={(back)}
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      >
+                        back
+                      </button>
     </div>
   );
 };

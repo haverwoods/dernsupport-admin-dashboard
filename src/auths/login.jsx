@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,20 +9,33 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // const getToken = localStorage.getItem("token");
+  // const checktoken  = jwtDecode(getToken)
+  // const admin = checktoken.role?.[0]?.name;
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const response = await axios.post('/api/auth/login', { email, password });
-      // localStorage.setItem('token', response.data.token);
-      // navigate('/OverviewPage');
+  
       const response = await axios.post('http://localhost:5000/api/auth/login', {email, password });
       console.log("Registration successful:", response.data);
       localStorage.setItem("token", response.data.token);
-      navigate("/OverviewPage");
+      const getToken = localStorage.getItem("token");
+      const checktoken  = jwtDecode(getToken)
+      // const admin = checktoken.role?.[0]?.name;
+      const isAdmin = checktoken.role?.[0]?.name === 'admin';
+      if (isAdmin) {
+        navigate("/OverviewPage");
+      }
+      else{
+    navigate("/repairreq");
+      }
+    
     } catch (err) {
       setError(err.response.data.msg || 'An error occurred during login');
     }
   };
+
+
 
   return (
 
